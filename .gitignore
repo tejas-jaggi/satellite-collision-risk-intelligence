@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+
+# Data folders
+data/raw/*
+data/processed/*
+data/*.db
+
+# Allow folder structure but ignore files
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model files (optional)
+models/*.pkl
+
+# OS files
+.DS_Store
+Thumbs.db
