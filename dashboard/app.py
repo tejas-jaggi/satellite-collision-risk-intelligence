@@ -119,7 +119,7 @@ PLOTLY_TEMPLATE = dict(
 def load_data():
     """Load risk summary. Falls back to demo data if not yet generated."""
 
-    primary_path = "data/processed/final_satellite_risk_scores.csv"
+    primary_path = "dashboard/data/final_satellite_risk_scores.csv"
 
     if os.path.exists(primary_path):
 
