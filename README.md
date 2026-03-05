@@ -1,186 +1,208 @@
-# 🛰️ Satellite Collision Risk Intelligence Platform
+🛰️ Satellite Collision Risk Intelligence Platform
 
-> *Real orbital data. Real ML model. Real collision risk scoring.*
+An end-to-end data science and machine learning platform that analyzes 58,000+ satellites to estimate orbital congestion and potential collision risk.
 
-[![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)](https://python.org)
-[![XGBoost](https://img.shields.io/badge/Model-XGBoost-orange)](https://xgboost.readthedocs.io)
-[![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-red?logo=streamlit)](https://streamlit.io)
-[![Data](https://img.shields.io/badge/Data-CelesTrak-green)](https://celestrak.org)
+The system ingests real satellite orbital data, engineers physics-based features, trains a machine learning model, and presents results through an interactive **Streamlit dashboard**.
 
 ---
 
-## 🎯 Project Overview
+🌍 Live Dashboard
 
-An end-to-end intelligence platform that ingests live satellite orbital data from **CelesTrak**, engineers collision-risk features using orbital mechanics, trains an **XGBoost classifier**, and serves real-time risk scores through an **interactive Streamlit dashboard**.
+**Interactive App:**
+https://satellite-collision-risk.streamlit.app/
 
-This mimics real-world **Space Traffic Management (STM)** systems used by NASA, ESA, and commercial operators.
+Explore:
 
-**Core Question:**
-> *"Which satellites have the highest probability of collision in the next orbit cycle?"*
-
----
-
-## 🚀 Live Demo
-
-[🌐 Open Dashboard](https://your-app.streamlit.app) ← *Deploy to Streamlit Cloud*
+* Satellite collision risk levels
+* Orbital congestion zones
+* Satellite search and filtering
+* Interactive orbital visualizations
 
 ---
 
-## 📊 Key Findings
+🚀 Project Overview
 
-*(Fill these in after running the pipeline)*
+Space around Earth is becoming increasingly crowded.
 
-- **XX%** of tracked objects cluster in the high-risk LEO zone below 1,000km
-- **Top risk country:** [fill]
-- **Model ROC-AUC:** [fill after training]
-- **CRITICAL tier satellites:** [fill]
+With thousands of satellites and debris objects in orbit, the probability of collisions is rising. A single collision can generate thousands of fragments, increasing the danger of further collisions.
+
+This project builds a **collision risk intelligence system** that:
+
+1. Collects satellite orbital data
+2. Analyzes orbital congestion
+3. Uses machine learning to estimate risk
+4. Displays results through an interactive dashboard
 
 ---
 
-## 🏗️ Architecture
+🧠 Key Features
+
+✔ Real satellite data ingestion from **CelesTrak**
+✔ Orbital mechanics feature engineering
+✔ Machine learning collision risk model (XGBoost)
+✔ Interactive orbital visualization
+✔ Satellite search and filtering
+✔ Risk tier classification (Low → Critical)
+✔ Deployable Streamlit dashboard
+
+---
+
+⚙️ Data Pipeline Architecture
 
 ```
-CelesTrak API (~35,000 objects)
-        ↓
-01_data_ingestion.py  ← ETL pipeline → SQLite
-        ↓
-02_eda.py             ← Exploratory analysis + charts
-        ↓
-03_feature_engineering.py  ← 10+ orbital risk features
-        ↓
-04_collision_model.py ← XGBoost binary classifier
-        ↓
-05_risk_scoring.py    ← Composite risk score + tiers
-        ↓
-app.py                ← Streamlit monitoring dashboard
-```
-
----
-
-## 📁 Project Structure
-
-```
-space-collision-intelligence/
-├── data/
-│   ├── raw/                    ← CelesTrak API JSON responses
-│   ├── processed/              ← Cleaned + feature-engineered CSVs
-│   └── space_data.db           ← SQLite database
-├── notebooks/
-│   ├── 01_data_ingestion.py
-│   ├── 02_eda.py
-│   ├── 03_feature_engineering.py
-│   ├── 04_collision_model.py
-│   └── 05_risk_scoring.py
-├── models/
-│   └── collision_model.pkl     ← Trained XGBoost model
-├── outputs/
-│   ├── satellite_risk_summary.csv
-│   └── plots/                  ← EDA + model charts
-├── app.py                      ← Streamlit dashboard
-├── requirements.txt
-└── README.md
+CelesTrak API
+      ↓
+Data Ingestion
+      ↓
+Orbital Feature Engineering
+      ↓
+Machine Learning Model
+      ↓
+Risk Scoring Engine
+      ↓
+Streamlit Dashboard
 ```
 
 ---
 
-## ⚙️ Setup & Run
+🔬 Machine Learning Model
 
-### 1. Clone & Install
+The system uses **XGBoost**, a gradient boosting algorithm well suited for structured data.
 
-```bash
-git clone https://github.com/YOUR_USERNAME/space-collision-intelligence.git
-cd space-collision-intelligence
+### Input Features
 
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
-
-pip install -r requirements.txt
-```
-
-### 2. Run Pipeline (in order)
-
-```bash
-python notebooks/01_data_ingestion.py    # ~5 min (API fetch)
-python notebooks/02_eda.py               # ~2 min
-python notebooks/03_feature_engineering.py  # ~3 min
-python notebooks/04_collision_model.py   # ~5 min
-python notebooks/05_risk_scoring.py      # ~1 min
-```
-
-### 3. Launch Dashboard
-
-```bash
-streamlit run app.py
-# Opens at http://localhost:8501
-```
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Data Pipeline | Python · Requests · SQLite |
-| Data Processing | Pandas · NumPy |
-| Visualization | Matplotlib · Seaborn · Plotly |
-| Machine Learning | Scikit-learn · XGBoost |
-| Dashboard | Streamlit |
-| Deployment | GitHub · Streamlit Cloud |
-
----
-
-## 📡 Data Sources
-
-| Source | Description | Size |
-|--------|-------------|------|
-| [CelesTrak Active](https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=json) | Live orbital elements for active satellites | ~9,000 objects |
-| [CelesTrak Debris](https://celestrak.org/NORAD/elements/gp.php?GROUP=debris&FORMAT=json) | Space debris tracking data | ~25,000 objects |
-
----
-
-## 🔬 Features Engineered
-
-| Feature | Description |
-|---------|-------------|
-| `altitude_km` | Orbital altitude derived from TLE mean motion |
-| `orbital_density` | Objects in ±50km altitude window |
-| `debris_density` | Debris objects in proximity band |
-| `proximity_score` | Normalized distance to nearest debris cluster |
-| `velocity_risk` | Risk-weighted orbital velocity |
-| `altitude_risk` | Zone-based altitude risk (peaks at 400-600km) |
-| `eccentricity_risk` | Orbit crossing risk from eccentricity |
-| `is_leo` | Binary: altitude < 2000km |
-| `high_inclination` | Binary: inclination 80-110° (polar crossings) |
-| `sun_sync_orbit` | Binary: inclination 95-100° (congested zone) |
-
----
-
-## 🏆 Risk Scoring Formula
+Examples include:
 
 ```
-collision_risk = 0.40 × model_probability
-               + 0.25 × proximity_score
-               + 0.20 × orbital_density_score
-               + 0.15 × velocity_risk
+altitude_km
+inclination
+velocity_kms
+orbital_density
+eccentricity
+is_leo
+high_inclination
+sun_sync_orbit
 ```
 
-| Tier | Score Range | Action |
-|------|-------------|--------|
-| 🔴 CRITICAL | ≥ 0.70 | Immediate monitoring required |
-| 🟠 HIGH | 0.50 – 0.70 | Close monitoring required |
-| 🟡 MEDIUM | 0.30 – 0.50 | Standard monitoring |
-| 🟢 LOW | < 0.30 | Routine tracking |
+### Output
+
+The model predicts: collision_probability
+
+Which is converted into four risk categories:
+
+```
+LOW
+MEDIUM
+HIGH
+CRITICAL
+```
 
 ---
 
-## 💼 Portfolio Skills Demonstrated
+📈 Feature Engineering
 
-- **Data Engineering:** API ingestion, ETL, SQLite schema design
-- **Data Analysis:** EDA, insight discovery, orbital mechanics
-- **Data Science:** Feature engineering, XGBoost modeling, ROC-AUC evaluation
-- **Risk Analytics:** Composite scoring, tier classification (analogous to credit/supplier risk)
-- **Deployment:** GitHub, Streamlit Cloud, interactive dashboard
+Physics-inspired features were created to represent orbital risk:
+
+| Feature           | Meaning                          |
+| ----------------- | -------------------------------- |
+| orbital_density   | number of nearby satellites      |
+| proximity_score   | closeness of neighboring objects |
+| velocity_risk     | collision impact severity        |
+| altitude_risk     | crowded orbital bands            |
+| eccentricity_risk | unstable orbits                  |
 
 ---
 
-*Built as a portfolio project demonstrating full-stack data science capabilities in a real-world aerospace analytics context.*
+📊 Model Performance
+
+```
+Accuracy: 97.4%
+ROC-AUC: 0.9976
+```
+
+These results show the model effectively identifies high-risk orbital environments.
+
+---
+
+🖥 Technologies Used
+
+**Programming**
+
+Python
+
+**Data Processing**
+
+* pandas
+* numpy
+
+**Machine Learning**
+
+* scikit-learn
+* XGBoost
+
+**Visualization**
+
+* Plotly
+* Matplotlib
+* Seaborn
+
+**Dashboard**
+
+* Streamlit
+
+**Database**
+
+SQLite
+
+---
+
+🔎 Dashboard Capabilities
+
+The dashboard allows users to:
+
+✔ Search satellites (STARLINK, ISS, COSMOS, etc.)
+✔ Filter by altitude
+✔ Filter by risk score
+✔ Filter by risk tier
+✔ View orbital congestion zones
+✔ Download satellite risk reports
+
+---
+
+📚 What This Project Demonstrates
+
+This project showcases skills in:
+
+* Data engineering pipelines
+* Orbital mechanics feature engineering
+* Machine learning modeling
+* Data visualization
+* Interactive dashboards
+* Cloud deployment
+* Git version control
+
+---
+
+🚀 Future Improvements
+
+Possible extensions include:
+
+* Real-time satellite tracking
+* Collision probability simulation
+* Debris tracking integration
+* Space traffic management tools
+* AI-driven orbital congestion prediction
+
+---
+
+# 👨‍💻 Author
+
+**Tejas Jaggi**
+
+MS in Information Systems
+University of Illinois Urbana-Champaign
+
+GitHub
+https://github.com/tejas-jaggi
+
+---
